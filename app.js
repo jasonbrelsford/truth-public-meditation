@@ -102,6 +102,8 @@ let meditationActive = false;
 let meditationStartAt = Date.now() + 30000;
 let meditationInterrupted = false;
 let meditationResumeTimer = null;
+let meditationPaused = false;
+let meditationPauseCheckTimer = null;
 let wakeLock = null;
 let experienceStarted = false;
 let prepSpoken = false;
@@ -546,9 +548,19 @@ function setupSpeechRecognition() {
     if (aiTranscript) aiTranscript.value = result;
     lastUserLang = recognition.lang || navigator.language || "en-US";
     selectedAiVoice = pickAiVoice(lastUserLang);
+    const normalized = result.toLowerCase();
+    const pauseTokens = ["pause", "stop", "hold on", "wait", "please stop"];
+    const resumeTokens = ["continue", "resume", "yes", "ready", "go on"];
+    if (pauseTokens.some((token) => normalized.includes(token))) {
+      pauseMeditation();
+      return;
+    }
+    if (meditationPaused && resumeTokens.some((token) => normalized.includes(token))) {
+      resumeMeditation();
+      return;
+    }
     handleMeditationInterrupt();
     if (awaitingMeditationConsent) {
-      const normalized = result.toLowerCase();
       const yesTokens = ["yes", "yeah", "yep", "sure", "ok", "okay", "begin", "start", "ready"];
       const noTokens = ["no", "not now", "later", "stop", "no thanks", "dont", "don't"];
       const isYes = yesTokens.some((token) => normalized.includes(token));
@@ -747,7 +759,7 @@ function playMeditationStep() {
     meditationActive = false;
     return;
   }
-  if (meditationInterrupted) return;
+  if (meditationInterrupted || meditationPaused) return;
   const line = meditationQueue.shift();
   const lineTrimmed = line.trim();
   const hasPeriod = lineTrimmed.includes(".");
@@ -783,6 +795,30 @@ function handleMeditationInterrupt() {
       playMeditationStep();
     }, 1200);
   }, 5000);
+}
+
+function pauseMeditation() {
+  if (!meditationActive) return;
+  meditationPaused = true;
+  window.speechSynthesis.cancel();
+  if (meditationPauseCheckTimer) clearTimeout(meditationPauseCheckTimer);
+  meditationPauseCheckTimer = setTimeout(() => {
+    if (!meditationPaused) return;
+    speak("Would you like to continue the meditation?", getAiVoiceSettings());
+  }, 120000);
+}
+
+function resumeMeditation() {
+  if (!meditationPaused) return;
+  meditationPaused = false;
+  if (meditationPauseCheckTimer) {
+    clearTimeout(meditationPauseCheckTimer);
+    meditationPauseCheckTimer = null;
+  }
+  speak("Thank you. We will continue now.", getAiVoiceSettings());
+  setTimeout(() => {
+    playMeditationStep();
+  }, 1200);
 }
 
 async function requestWakeLock() {
