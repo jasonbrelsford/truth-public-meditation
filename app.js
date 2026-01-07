@@ -324,12 +324,24 @@ function pickVoiceForLang(lang, preferredTokens = []) {
   const normalized = (lang || "").toLowerCase();
   const base = normalized.split("-")[0];
   const tokens = preferredTokens.map((token) => token.toLowerCase());
-  const femaleTokens = ["female", "woman", "zira", "samantha", "victoria", "tessa", "moira"];
+  const femaleTokens = [
+    "female",
+    "woman",
+    "samantha",
+    "victoria",
+    "tessa",
+    "moira",
+    "siri",
+    "karen",
+    "susan",
+  ];
+  const avoidTokens = ["male", "man", "alex", "daniel", "fred"];
 
   let best = null;
   let bestScore = -1;
   voices.forEach((voice) => {
     const name = `${voice.name} ${voice.lang}`.toLowerCase();
+    if (avoidTokens.some((token) => name.includes(token))) return;
     let score = 0;
     if (normalized && voice.lang.toLowerCase().startsWith(normalized)) score += 3;
     else if (base && voice.lang.toLowerCase().startsWith(base)) score += 2;
@@ -351,9 +363,9 @@ function pickVoiceForLang(lang, preferredTokens = []) {
 function pickAiVoice(lang) {
   const normalized = (lang || "").toLowerCase();
   if (normalized.startsWith("en")) {
-    return pickVoiceForLang("en-IN", ["en-in", "india", "indian", "hindi", "female"]);
+    return pickVoiceForLang("en-IN", ["en-in", "india", "indian", "hindi", "female", "siri"]);
   }
-  return pickVoiceForLang(lang, ["female"]);
+  return pickVoiceForLang(lang, ["female", "siri"]);
 }
 
 function getBaseColor() {
