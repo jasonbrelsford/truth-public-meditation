@@ -679,7 +679,7 @@ function startMeditationGuide() {
   requestWakeLock();
   const script = [
     "Find a position where your spine is supported but relaxed. Eyes closed. Hands resting easily. If this meditation is interupted just indicate with your voice that you are ready to continue.",
-    "Give your intention to be open to spirirt and those that have crossed.",
+    "Give your intention to be open to spirit and those that have crossed.",
     "Give your intention to help anyone or anything here that needs you for messages from the other side.",
     "Begin with slow breathing. Inhale through the nose to a count of four. Exhale through the mouth to a count of six.",
     "Do this several times. . . . . . . . . . . . . . . . .",
