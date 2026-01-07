@@ -20,6 +20,7 @@ const aiSendBtn = document.getElementById("ai-send");
 const aiTranscript = document.getElementById("ai-transcript");
 const aiStatus = document.getElementById("ai-status");
 const aiResponse = document.getElementById("ai-response");
+const voiceSelect = document.getElementById("voice-select");
 const statusAi = document.getElementById("status-ai");
 const statusLast = document.getElementById("status-last");
 const statusError = document.getElementById("status-error");
@@ -111,6 +112,7 @@ let prepSpoken = false;
 let awaitingMeditationConsent = false;
 let meditationConsent = null;
 let voiceUnlocked = false;
+let manualVoiceName = "";
 
 document.body.classList.add("prelude");
 
@@ -360,7 +362,38 @@ function pickVoiceForLang(lang, preferredTokens = []) {
   return best || voices[0];
 }
 
+function getAllVoices() {
+  if (!window.speechSynthesis) return [];
+  return window.speechSynthesis.getVoices();
+}
+
+function populateVoiceSelect() {
+  if (!voiceSelect) return;
+  const voices = getAllVoices();
+  if (!voices.length) return;
+  const current = manualVoiceName || voiceSelect.value;
+  voiceSelect.innerHTML = "<option value=\"\">Auto</option>";
+  voices.forEach((voice) => {
+    const option = document.createElement("option");
+    option.value = voice.name;
+    option.textContent = `${voice.name} (${voice.lang})`;
+    voiceSelect.appendChild(option);
+  });
+  if (current) {
+    voiceSelect.value = current;
+    manualVoiceName = current;
+  }
+}
+
+function getManualVoice() {
+  if (!manualVoiceName) return null;
+  const voices = getAllVoices();
+  return voices.find((voice) => voice.name === manualVoiceName) || null;
+}
+
 function pickAiVoice(lang) {
+  const manual = getManualVoice();
+  if (manual) return manual;
   const normalized = (lang || "").toLowerCase();
   if (normalized.startsWith("en")) {
     return pickVoiceForLang("en-IN", ["en-in", "india", "indian", "hindi", "female", "siri"]);
@@ -700,7 +733,16 @@ if (window.speechSynthesis) {
   window.speechSynthesis.onvoiceschanged = () => {
     selectedVoice = pickVoice();
     selectedAiVoice = pickAiVoice(lastUserLang);
+    populateVoiceSelect();
   };
+}
+
+if (voiceSelect) {
+  voiceSelect.addEventListener("change", () => {
+    manualVoiceName = voiceSelect.value;
+    selectedAiVoice = pickAiVoice(lastUserLang);
+  });
+  populateVoiceSelect();
 }
 
 if (speakSpiritBtn) {

@@ -118,12 +118,18 @@
               Voice or notes
               <textarea id="ai-transcript" rows="3" placeholder="Speak or type what you want to adjust..."></textarea>
             </label>
-            <div class="ai-controls">
+          <div class="ai-controls">
               <button class="btn ghost" id="ai-listen">I'm Listening</button>
               <button class="btn ghost" id="ai-send">Send to AI</button>
             </div>
             <div class="ai-status" id="ai-status"></div>
             <div class="ai-response" id="ai-response"></div>
+            <label class="field">
+              Voice selection
+              <select id="voice-select">
+                <option value="">Auto</option>
+              </select>
+            </label>
           </div>
           <p class="hint">Audio starts on first interaction (browser requirement).</p>
           <div class="signal">
