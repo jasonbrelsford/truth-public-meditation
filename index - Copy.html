@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Truth - Veil Meditation Prototype</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+    <div class="noise"></div>
+
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Truth Improve App - Test Prototype</p>
+        <h1>Open Heart, Open Mind</h1>
+        <p class="lead">
+          A gentle space for meditation, music, and guidance. This prototype explores how
+          we might visualize the veil and invite connection beyond it, without claiming
+          to understand how it happens.
+        </p>
+        <div class="cta-row">
+          <button class="btn primary" id="start-session">Begin Session</button>
+          <button class="btn ghost" id="toggle-tone">Stop Ambient Audio</button>
+        </div>
+        <div class="meta">
+          <span>Session length</span>
+          <input type="range" id="session-length" min="5" max="30" value="12" />
+          <span id="session-length-value">12 min</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel grid">
+        <div class="card">
+          <h2>Breath Guidance</h2>
+          <p>
+            Settle into a slow rhythm. Inhale for 4, hold for 4, exhale for 6.
+            Let each cycle soften the edges between you and what is beyond.
+          </p>
+          <div class="breath">
+            <div class="breath-state" id="breath-state">Ready</div>
+            <div class="breath-meter">
+              <div class="breath-fill" id="breath-fill"></div>
+            </div>
+            <button class="btn secondary" id="start-breath">Start Breath Cycle</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Intentions and Signals</h2>
+          <p>
+            Name what you are seeking. The visualization responds to your words and the
+            simulated signal field. This is a test harness for future sensing ideas.
+          </p>
+          <label class="field">
+            Your intention
+            <input type="text" id="intention" placeholder="Clarity, peace, reunion..." />
+          </label>
+          <label class="field">
+            Audio mode (headphones recommended)
+            <select id="audio-mode">
+              <option value="binaural">Binaural beats</option>
+              <option value="drift">Slow drift</option>
+              <option value="breath">Breath synced</option>
+            </select>
+          </label>
+          <label class="field">
+            Frequency focus (Hz)
+            <input type="range" id="frequency" min="40" max="528" value="96" />
+          </label>
+          <label class="field">
+            Beat depth (Hz)
+            <input type="range" id="beat-depth" min="1" max="12" value="5" />
+          </label>
+          <label class="field">
+            Volume
+            <input type="range" id="volume" min="1" max="100" value="25" />
+          </label>
+          <label class="field">
+            Sensitivity
+            <input type="range" id="sensitivity" min="1" max="100" value="55" />
+          </label>
+          <div class="spirit-voice">
+            <h3>Spirit Voice Channel</h3>
+            <p class="hint">
+              Breath guidance stays silent. This voice channel can be used when a message is received.
+            </p>
+            <label class="field">
+              Spirit message
+              <input type="text" id="spirit-message" placeholder="Type or paste received words..." />
+            </label>
+            <label class="field">
+              Spirit modulation
+              <input type="range" id="spirit-mod" min="0" max="100" value="35" />
+            </label>
+            <button class="btn ghost" id="speak-spirit">Speak Message</button>
+          </div>
+          <p class="hint">Audio starts on first interaction (browser requirement).</p>
+          <div class="signal">
+            <div class="signal-label">Signal presence</div>
+            <div class="signal-bar">
+              <div class="signal-fill" id="signal-fill"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel veil">
+        <div class="veil-copy">
+          <h2>The Veil Visualization</h2>
+          <p>
+            Colors and shapes form from shared attention. Imagine each pulse as a whisper
+            from the other side. This display is a symbolic bridge and a space for future
+            instrumentation.
+          </p>
+          <ul class="veil-list">
+            <li>Warm hues suggest comfort and remembrance</li>
+            <li>Cool hues suggest calm guidance and protection</li>
+            <li>Bright arcs suggest active contact or response</li>
+          </ul>
+        </div>
+        <div id="veil-3d" class="veil-stage" aria-label="3D veil visualization">
+          <button class="btn ghost fullscreen-btn" id="toggle-fullscreen">Full Screen</button>
+        </div>
+      </section>
+
+      <section class="panel grid">
+        <div class="card">
+          <h2>Guidance for the Living</h2>
+          <p>
+            Use this space to reflect on what is unresolved, what is loved, and what can
+            be released today. You are not alone in this exploration.
+          </p>
+          <div class="guidance">
+            <div>
+              <h3>Reflection prompt</h3>
+              <p id="prompt">What memory brings you peace right now?</p>
+              <button class="btn ghost" id="new-prompt">New Prompt</button>
+            </div>
+            <div>
+              <h3>Session note</h3>
+              <textarea id="session-note" rows="6" placeholder="Write what you sense or feel..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Prototype Feedback</h2>
+          <p>
+            This test site is for learning. Share how the experience felt and what you
+            wish it could do.
+          </p>
+          <form id="feedback-form">
+            <label class="field">
+              Name (optional)
+              <input type="text" id="name" />
+            </label>
+            <label class="field">
+              How did the session feel?
+              <textarea id="feedback" rows="5" required></textarea>
+            </label>
+            <button class="btn primary" type="submit">Send feedback</button>
+            <div class="form-status" id="form-status"></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        This prototype does not claim scientific validation. It is a contemplative space
+        to explore connection, intention, and gentle listening.
+      </p>
+    </footer>
+
+    <script src="https://unpkg.com/three@0.159.0/build/three.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
