@@ -40,7 +40,7 @@
 
     <main>
       <section class="panel grid">
-        <div class="card">
+        <div class="card breath-card">
           <h2>Breath Guidance</h2>
           <p>
             Settle into a slow rhythm. Inhale for 4, hold for 4, exhale for 6.
@@ -55,17 +55,17 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card intent-card">
           <h2>Intentions and Signals</h2>
           <p>
             Name what you are seeking. The visualization responds to your words and the
             simulated signal field. This is a test harness for future sensing ideas.
           </p>
-          <label class="field">
+          <label class="field phone-essential">
             Your intention
             <input type="text" id="intention" placeholder="Clarity, peace, reunion..." />
           </label>
-          <label class="field">
+          <label class="field phone-essential">
             Audio mode (headphones required)
             <select id="audio-mode">
               <option value="binaural">Binaural beats</option>
@@ -73,15 +73,15 @@
               <option value="breath">Breath synced</option>
             </select>
           </label>
-          <label class="field">
+          <label class="field phone-essential">
             Frequency focus (Hz)
             <input type="range" id="frequency" min="40" max="528" value="89" />
           </label>
-          <label class="field">
+          <label class="field phone-essential">
             Beat depth (Hz)
             <input type="range" id="beat-depth" min="1" max="12" value="5" />
           </label>
-          <label class="field">
+          <label class="field phone-essential">
             Volume
             <input type="range" id="volume" min="1" max="100" value="25" />
           </label>
@@ -111,7 +111,7 @@
             </label>
             <button class="btn ghost" id="speak-spirit">Speak Message</button>
           </div>
-          <div class="ai-bridge">
+          <div class="ai-bridge phone-essential">
             <h3>AI Attunement</h3>
             <p class="hint">Speak your desired color, pulse speed, or audio feel.</p>
             <label class="field">
@@ -124,7 +124,7 @@
             </div>
             <div class="ai-status" id="ai-status"></div>
             <div class="ai-response" id="ai-response"></div>
-            <label class="field">
+            <label class="field phone-essential">
               Voice selection
               <select id="voice-select">
                 <option value="">Auto</option>
@@ -167,7 +167,7 @@
       </section>
 
       <section class="panel grid">
-        <div class="card">
+        <div class="card guidance-card">
           <h2>Guidance for the Living</h2>
           <p>
             Use this space to reflect on what is unresolved, what is loved, and what can
@@ -186,7 +186,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card feedback-card">
           <h2>Prototype Feedback</h2>
           <p>
             This test site is for learning. Share how the experience felt and what you
