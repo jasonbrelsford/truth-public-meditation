@@ -7,3 +7,8 @@ Hosting notes
 Config
 - Update `config.js` with your deployed AI proxy URL.
 - For local overrides, create `config.local.js` (ignored by git) and include it after `config.js` in `index.html`.
+
+Deploy checklist
+- GitHub Pages: Settings → Pages → Deploy from branch → `main` / root.
+- Render: New Web Service → select repo → set `OPENAI_API_KEY` env var → deploy.
+- Update `config.js` with your Render URL (e.g., `https://your-app.onrender.com/api/suggest`) and push.

@@ -105,6 +105,8 @@ let meditationResumeTimer = null;
 let wakeLock = null;
 let experienceStarted = false;
 let prepSpoken = false;
+let awaitingMeditationConsent = false;
+let meditationConsent = null;
 
 document.body.classList.add("prelude");
 
@@ -545,6 +547,26 @@ function setupSpeechRecognition() {
     lastUserLang = recognition.lang || navigator.language || "en-US";
     selectedAiVoice = pickAiVoice(lastUserLang);
     handleMeditationInterrupt();
+    if (awaitingMeditationConsent) {
+      const normalized = result.toLowerCase();
+      const yesTokens = ["yes", "yeah", "yep", "sure", "ok", "okay", "begin", "start", "ready"];
+      const noTokens = ["no", "not now", "later", "stop", "no thanks", "dont", "don't"];
+      const isYes = yesTokens.some((token) => normalized.includes(token));
+      const isNo = noTokens.some((token) => normalized.includes(token));
+      if (isYes) {
+        awaitingMeditationConsent = false;
+        meditationConsent = true;
+        speak("Thank you. We will begin shortly.", getAiVoiceSettings());
+        scheduleMeditation(30000);
+        return;
+      }
+      if (isNo) {
+        awaitingMeditationConsent = false;
+        meditationConsent = false;
+        speak("Of course. I will stay with you and guide gently.", getAiVoiceSettings());
+        return;
+      }
+    }
     requestAiGuidance(result);
   };
 
@@ -619,6 +641,10 @@ function speak(text, settings = {}) {
     if (gainNode && preservedVolume !== null) {
       gainNode.gain.setTargetAtTime(preservedVolume, audioContext.currentTime, 0.08);
     }
+    if (ambientWanted) {
+      ensureAudio();
+      rampVolume(Number(volumeInput.value) / 100, 0.6);
+    }
   };
   utterance.onerror = utterance.onend;
   window.speechSynthesis.cancel();
@@ -647,6 +673,7 @@ if (speakSpiritBtn) {
 
 function startMeditationGuide() {
   if (meditationActive) return;
+  if (meditationConsent === false) return;
   meditationActive = true;
   meditationInterrupted = false;
   requestWakeLock();
@@ -702,15 +729,16 @@ function startExperience() {
   if (experienceStarted) return;
   experienceStarted = true;
   document.body.classList.remove("prelude");
-  if (!audioContext) {
-    startTone();
-    startBreathGuide();
-  }
+  startTone();
+  startBreathGuide();
   if (!prepSpoken && !meditationActive) {
     prepSpoken = true;
-    speak("Prepare for meditation now. We will begin in a few moments.", getAiVoiceSettings());
+    awaitingMeditationConsent = true;
+    speak(
+      "Would you like to hear a guided meditation? If so, please say yes to begin.",
+      getAiVoiceSettings()
+    );
   }
-  scheduleMeditation(30000);
   requestWakeLock();
 }
 
@@ -754,7 +782,7 @@ function handleMeditationInterrupt() {
     setTimeout(() => {
       playMeditationStep();
     }, 1200);
-  }, 120000);
+  }, 5000);
 }
 
 async function requestWakeLock() {
