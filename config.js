@@ -1,1 +1,1 @@
-window.AI_ENDPOINT = "https://your-render-app.onrender.com/api/suggest";
+window.AI_ENDPOINT = "https://truth-public-meditation.onrender.com/api/suggest";
