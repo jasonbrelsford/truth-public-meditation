@@ -409,6 +409,26 @@ footer {
   mix-blend-mode: soft-light;
 }
 
+.voice-unlock {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+  background: rgba(8, 9, 16, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.voice-unlock-card {
+  padding: 1.2rem 1.6rem;
+  border-radius: 18px;
+  border: 1px solid var(--stroke);
+  background: rgba(16, 18, 30, 0.9);
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
 @media (max-width: 900px) {
   .veil {
     grid-template-columns: 1fr;

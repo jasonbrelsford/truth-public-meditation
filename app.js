@@ -30,6 +30,7 @@ const feedbackForm = document.getElementById("feedback-form");
 const formStatus = document.getElementById("form-status");
 const veilStage = document.getElementById("veil-3d");
 const fullscreenBtn = document.getElementById("toggle-fullscreen");
+const voiceUnlock = document.getElementById("voice-unlock");
 
 const AI_ENDPOINT = window.AI_ENDPOINT || "http://localhost:8787/api/suggest";
 const AI_BASE_URL = (() => {
@@ -109,6 +110,7 @@ let experienceStarted = false;
 let prepSpoken = false;
 let awaitingMeditationConsent = false;
 let meditationConsent = null;
+let voiceUnlocked = false;
 
 document.body.classList.add("prelude");
 
@@ -663,6 +665,25 @@ function speak(text, settings = {}) {
   window.speechSynthesis.speak(utterance);
 }
 
+function setupVoiceUnlock() {
+  if (!voiceUnlock) return;
+  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent);
+  if (!isIOS || !window.speechSynthesis) return;
+
+  voiceUnlock.style.display = "flex";
+  const unlock = () => {
+    if (voiceUnlocked) return;
+    voiceUnlocked = true;
+    voiceUnlock.style.display = "none";
+    const utterance = new SpeechSynthesisUtterance("Voice enabled.");
+    utterance.volume = 0.01;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  };
+
+  voiceUnlock.addEventListener("click", unlock, { once: true });
+}
+
 if (window.speechSynthesis) {
   window.speechSynthesis.onvoiceschanged = () => {
     selectedVoice = pickVoice();
@@ -842,6 +863,7 @@ async function releaseWakeLock() {
 }
 
 setupSpeechRecognition();
+setupVoiceUnlock();
 if (recognitionInstance) {
   try {
     recognitionInstance.start();
